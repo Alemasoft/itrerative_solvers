@@ -1,9 +1,6 @@
-/// A library that offers some methods for solving systems of linear equations with iterative algorithms.
+/// Support for doing something awesome.
 ///
 /// More dartdocs go here.
 library iterative_solvers;
 
-export 'src/dense_matrix.dart' show DenseMatrix;
-export 'src/solvers_configs.dart' show IterativeSolversConfig;
-export 'src/sparse_matrix.dart' show SparseMatrix, SparseEntry;
-export 'src/vector.dart' show Vector;
+//TODO: Export any libraries intended for clients of this package.

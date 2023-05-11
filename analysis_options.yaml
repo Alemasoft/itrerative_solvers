@@ -22,6 +22,8 @@ include: package:lints/recommended.yaml
 analyzer:
   enable-experiment:
     - records
+#   exclude:
+#     - path/to/excluded/files/**
 
 # For more information about the core and recommended set of lints, see
 # https://dart.dev/go/core-lints
