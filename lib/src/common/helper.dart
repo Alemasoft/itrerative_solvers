@@ -31,3 +31,17 @@ extension MtxMatrix on Matrix {
     return Matrix.fromList(matrix, dtype: dType);
   }
 }
+
+extension MatrixCasting on Matrix {
+  Matrix to32() {
+    if (dtype == DType.float32) return this;
+    return Matrix.fromFlattenedList(asFlattenedList, rowCount, columnCount,
+        dtype: DType.float32);
+  }
+
+  Matrix to64() {
+    if (dtype == DType.float64) return this;
+    return Matrix.fromFlattenedList(asFlattenedList, rowCount, columnCount,
+        dtype: DType.float64);
+  }
+}

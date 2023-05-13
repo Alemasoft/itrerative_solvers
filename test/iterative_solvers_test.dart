@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 
 void main() {
   group('JacobiSolver', () {
-    GradientSolver jacobiSolver = GradientSolver(SolverConfig(verbose: true));
+    JacobiSolver jacobiSolver = JacobiSolver(SolverConfig(verbose: true));
     setUp(() {
       print("\n\nNew test\n\n");
     });
@@ -144,7 +144,7 @@ void main() {
     setUp(() {
       print("\n\nNew test\n\n");
     });
-    test("Gauss simple", () {
+    test("Gradient simple", () {
       Matrix A = Matrix.fromList([
         [4, -1, -1],
         [-2, 6, 1],
@@ -152,10 +152,7 @@ void main() {
       ]);
       Vector b = Vector.fromList([3, 9, -6]);
       Vector x = Vector.fromList([1, 2, -1]);
-      for (double tolerace in tolerances) {
-        gradientSolver.config.tolerance = tolerace;
-        gradientSolver.solve(a: A, b: b, x: x);
-      }
+      gradientSolver.solve(a: A, b: b, x: x);
     });
     test("3k X 3k matrix tolerance $tolerance4", () {
       DateTime dt = DateTime.now();

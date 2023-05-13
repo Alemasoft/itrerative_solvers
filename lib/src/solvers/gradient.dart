@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:iterative_solvers/src/common/helper.dart';
 import 'package:logging/logging.dart';
 import 'package:ml_linalg/linalg.dart';
 
@@ -98,18 +99,20 @@ class GradientSolver implements IterativeSolver {
     _clear();
     int n = b.length;
     Vector x0 = Vector.zero(n, dtype: DType.float64);
-    Matrix r = Matrix.column(b.toList(), dtype: DType.float64) - (a * x0);
+    Matrix r =
+        Matrix.column((b - (a * x0).toVector()).toList(), dtype: DType.float64);
     int k = 0;
     bool convergenceReached = false;
     _startTimer();
     while (!convergenceReached) {
       _logger.fine("Iteration $k");
-      Matrix gamma = r.transpose() * r / (r.transpose() * (a * r).toVector());
-      x0 = x0 + gamma * r;
+      double gamma = (r.transpose() * r)[0][0] /
+          (r.transpose() * (a.to64() * r.to64()).toVector())[0][0];
+      x0 = x0 + (r * gamma);
       convergenceReached = _checkConvergence(r.toVector(), k);
       _logger.fine("Convergence: $convergenceReached");
       if (convergenceReached) break;
-      r = r - gamma * (a * r).toVector();
+      r = r - (a.to64() * r.to64()) * gamma;
       k++;
       _iterationStreamController.add(k);
       _solutionStreamController.add(x0);
