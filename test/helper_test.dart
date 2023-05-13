@@ -15,17 +15,8 @@ bool equalsWithAnyTolerance(double a, double b) {
 
 void main() {
   group('Matrix Helper', () {
-    test("Diagonal", () {
-      Matrix A = Matrix.fromList([
-        [4, -1, -1],
-        [-2, 6, 1],
-        [-1, 1, 7],
-      ]);
-      List<double> d = A.diagonal;
-      expect(d, [4, 6, 7]);
-    });
     test("From mtx", () {
-      Matrix A = MatrixHelper.fromMtx("dati/spa1.mtx");
+      Matrix A = MtxMatrix.fromFile("dati/spa1.mtx");
       expect(A.isSquare, true);
       expect(A.isNotEmpty, true);
       expect(A.columnCount, 1000);
@@ -36,7 +27,7 @@ void main() {
       expect(equalsWithAnyTolerance(A[999][999], 149), true);
     });
     test("From mtx", () {
-      Matrix A = MatrixHelper.fromMtx("dati/spa2.mtx");
+      Matrix A = MtxMatrix.fromFile("dati/spa2.mtx");
       expect(A.columnCount, 3000);
       expect(A.rowCount, 3000);
       expect(A.isSquare, true);

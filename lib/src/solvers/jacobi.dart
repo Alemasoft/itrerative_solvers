@@ -93,7 +93,7 @@ class JacobiSolver implements IterativeSolver {
 
   @override
   Vector solve({required Matrix a, required Vector b, Vector? x}) {
-    _logger.fine("\n\nNew solve call");
+    _logger.fine("New solve call");
     _logger.fine("config", _config.toString());
     _clear();
     _startTimer();

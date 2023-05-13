@@ -4,6 +4,7 @@
 library iterative_solvers;
 
 export 'src/common/exception.dart';
+export 'src/common/helper.dart' show MtxMatrix;
 export 'src/solver_config.dart';
 export 'src/solvers/coniugate_gradient.dart';
 export 'src/solvers/gauss_seidel.dart';

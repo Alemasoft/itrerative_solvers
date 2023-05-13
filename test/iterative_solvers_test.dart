@@ -1,6 +1,4 @@
-import 'package:iterative_solvers/src/common/helper.dart';
-import 'package:iterative_solvers/src/solver_config.dart';
-import 'package:iterative_solvers/src/solvers/jacobi.dart';
+import 'package:iterative_solvers/iterative_solvers.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:test/test.dart';
 
@@ -25,7 +23,7 @@ void main() {
     });
     test("3k X 3k matrix tolerance $tolerance4", () {
       DateTime dt = DateTime.now();
-      Matrix A = MatrixHelper.fromMtx("dati/spa2.mtx", dType: DType.float64);
+      Matrix A = MtxMatrix.fromFile("dati/spa2.mtx", dType: DType.float64);
       DateTime dt2 = DateTime.now();
       print(dt2.difference(dt).toString());
       Vector b = Vector.filled(3000, 1.0, dtype: DType.float64);
@@ -37,7 +35,7 @@ void main() {
     });
     test("3k X 3k matrix tolerance $tolerance6", () {
       DateTime dt = DateTime.now();
-      Matrix A = MatrixHelper.fromMtx("dati/spa2.mtx", dType: DType.float64);
+      Matrix A = MtxMatrix.fromFile("dati/spa2.mtx", dType: DType.float64);
       DateTime dt2 = DateTime.now();
       print(dt2.difference(dt).toString());
       Vector b = Vector.filled(3000, 1.0, dtype: DType.float64);
@@ -49,7 +47,7 @@ void main() {
     });
     test("3k X 3k matrix tolerance $tolerance8", () {
       DateTime dt = DateTime.now();
-      Matrix A = MatrixHelper.fromMtx("dati/spa2.mtx", dType: DType.float64);
+      Matrix A = MtxMatrix.fromFile("dati/spa2.mtx", dType: DType.float64);
       DateTime dt2 = DateTime.now();
       print(dt2.difference(dt).toString());
       Vector b = Vector.filled(3000, 1.0, dtype: DType.float64);
@@ -61,7 +59,7 @@ void main() {
     });
     test("3k X 3k matrix tolerance $tolerance10", () {
       DateTime dt = DateTime.now();
-      Matrix A = MatrixHelper.fromMtx("dati/spa2.mtx", dType: DType.float64);
+      Matrix A = MtxMatrix.fromFile("dati/spa2.mtx", dType: DType.float64);
       DateTime dt2 = DateTime.now();
       print(dt2.difference(dt).toString());
       Vector b = Vector.filled(3000, 1.0, dtype: DType.float64);
