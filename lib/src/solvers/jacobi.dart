@@ -112,7 +112,6 @@ class JacobiSolver implements IterativeSolver {
         }
         solution = solution.set(i, (b[i] - sigma) / a[i][i]);
       }
-      _logger.fine("Solution", solution.sum());
       k++;
       _iterationStreamController.add(k);
       _solutionStreamController.add(solution);
