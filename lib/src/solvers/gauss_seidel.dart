@@ -79,6 +79,14 @@ class GaussSeidelSolver implements IterativeSolver {
         print(
             '${record.loggerName} | ${record.message}${record.error != null ? ": ${record.error}" : ""}');
       });
+    } else {
+      hierarchicalLoggingEnabled = true;
+      _logger.level = Level.INFO;
+      _logger.clearListeners();
+      _logger.onRecord.listen((record) {
+        print(
+            '${record.loggerName} | ${record.message}${record.error != null ? ": ${record.error}" : ""}');
+      });
     }
   }
 
@@ -87,7 +95,7 @@ class GaussSeidelSolver implements IterativeSolver {
     _solution = Vector.empty(dtype: DType.float64);
     _relativeError = 0;
     _error = null;
-    _logger.info("Solver cleared");
+    _logger.fine("Solver cleared");
   }
 
   bool _checkConvergence(Vector phi, Vector previousPhi, int k) {
@@ -104,8 +112,8 @@ class GaussSeidelSolver implements IterativeSolver {
 
   @override
   Vector solve({required Matrix a, required Vector b, Vector? x}) {
-    _logger.fine("New solve call");
-    _logger.fine("config", _config.toString());
+    _logger.info("Solver opened");
+    _logger.info("config", _config.toString());
     _clear();
     int k = 0;
     _startTimer();
@@ -134,10 +142,12 @@ class GaussSeidelSolver implements IterativeSolver {
     _iterations = k;
     _solution = phi;
     _logger.info("Solver solution", phi);
+    _logger.info("Solver iterations", _iterations);
     if (x != null) {
       _relativeError = _calculateRelativeError(x, phi);
       _logger.info("Relative error", _relativeError);
     }
+    _logger.info("Solver closed\n\n");
     return phi;
   }
 

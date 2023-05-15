@@ -81,6 +81,14 @@ class GradientSolver implements IterativeSolver {
         print(
             '${record.loggerName} | ${record.message}${record.error != null ? ": ${record.error}" : ""}');
       });
+    } else {
+      hierarchicalLoggingEnabled = true;
+      _logger.level = Level.INFO;
+      _logger.clearListeners();
+      _logger.onRecord.listen((record) {
+        print(
+            '${record.loggerName} | ${record.message}${record.error != null ? ": ${record.error}" : ""}');
+      });
     }
   }
 
@@ -89,13 +97,13 @@ class GradientSolver implements IterativeSolver {
     _solution = Vector.empty(dtype: DType.float64);
     _relativeError = 0;
     _error = null;
-    _logger.info("Solver cleared");
+    _logger.fine("Solver cleared");
   }
 
   @override
   Vector solve({required Matrix a, required Vector b, Vector? x}) {
-    _logger.fine("New solve call");
-    _logger.fine("config", _config.toString());
+    _logger.info("Solver opened");
+    _logger.info("config", _config.toString());
     _clear();
     int n = b.length;
     Vector x0 = Vector.zero(n, dtype: DType.float64);
@@ -104,27 +112,36 @@ class GradientSolver implements IterativeSolver {
     int k = 0;
     bool convergenceReached = false;
     _startTimer();
-    while (!convergenceReached) {
-      _logger.fine("Iteration $k");
-      double gamma = (r.transpose() * r)[0][0] /
-          (r.transpose() * (a.to64() * r.to64()).toVector())[0][0];
-      x0 = x0 + (r * gamma);
-      convergenceReached = _checkConvergence(r.toVector(), k);
-      _logger.fine("Convergence: $convergenceReached");
-      if (convergenceReached) break;
-      r = r - (a.to64() * r.to64()) * gamma;
-      k++;
-      _iterationStreamController.add(k);
-      _solutionStreamController.add(x0);
+    try {
+      while (!convergenceReached) {
+        _logger.fine("Iteration $k");
+        double gamma = (r.transpose() * r)[0][0] /
+            (r.transpose() * (a.to64() * r.to64()).toVector())[0][0];
+        x0 = x0 + (r * gamma);
+        convergenceReached = _checkConvergence(r.toVector(), k);
+        _logger.fine("Convergence: $convergenceReached");
+        if (convergenceReached) break;
+        r = r - (a.to64() * r.to64()) * gamma;
+        k++;
+        _iterationStreamController.add(k);
+        _solutionStreamController.add(x0);
+      }
+    } catch (e) {
+      _error = e.toString();
+      _logger.severe(_error);
+      throw IterativeSolverException(_error!);
+    } finally {
+      _endTimer();
+      _iterations = k;
+      _solution = x0;
+      _logger.info("Solver solution", x0);
+      _logger.info("Solver iterations", _iterations);
+      if (x != null) {
+        _relativeError = _calculateRelativeError(x, x0);
+        _logger.info("Relative error", _relativeError);
+      }
     }
-    _endTimer();
-    _iterations = k;
-    _solution = x0;
-    _logger.info("Solver solution", x0);
-    if (x != null) {
-      _relativeError = _calculateRelativeError(x, x0);
-      _logger.info("Relative error", _relativeError);
-    }
+    _logger.info("Solver closed\n\n");
     return x0;
   }
 
